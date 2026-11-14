@@ -18,6 +18,7 @@ Open <http://localhost:4173>. The simulator, generated still, video-like animati
 | --- | --- | --- |
 | Four-way joystick | Arrow keys | Navigate the home carousel and operate the current mode |
 | Center click | Enter | Open, play/pause, or select the focused item |
+| Side power toggle | `P` | Power the display and audio engine on/off |
 | Back | Escape / Backspace | Return to the previous screen |
 | A / B / C soft keys | `1` / `2` / `3` | Context-sensitive orange / cyan / lime actions |
 | LCD / AV-OUT / HOLD slide | Click one of the three hardware positions | Change output or lock all hardware/key inputs |
@@ -28,7 +29,7 @@ On HOME, left/right move the five-tile window across all eight modes; the focuse
 ## Screen map and actions
 
 1. **MOVIE** — generated moving vector reel; Enter play/pause, left/right scrub, A aspect, B subtitles, C soundtrack.
-2. **MUSIC** — animated tape deck and frequency-reactive spectrum. Left/right cycle three original procedural tracks (about 27–30 seconds each); Enter plays/pauses; A changes synth/EQ voicing, B repeat/shuffle, C marks/clears an A–B loop; up/down changes output volume.
+2. **MUSIC** — animated tape deck and frequency-reactive spectrum. Left/right cycle three original procedural tracks with a 10-second core sequence looped three times (30 seconds each); Enter plays/pauses; A changes synth/EQ voicing, B repeat/shuffle, C marks/clears an A–B loop; up/down changes output volume.
 3. **PHOTO** — generated RAW-style frame; A rule-of-thirds grid, B zoom, joystick pan, C next frame; live RGB histogram and camera telemetry.
 4. **TEXT** — paged field notes with scrolling, font sizing, markers and bookmarks.
 5. **RADIO** — FM dial, 25 presets, tuning/seek, preset selection and record-state trigger.
@@ -40,10 +41,17 @@ The A/B/C legend stays at the bottom edge of every screen. The A2 slide switch r
 
 ## Demo media and sound
 
-The optional section after the hardware shows an inline Optical Bench still, an interactive 12-second generated vector-animation loop, and the same live synthesizer used in Music mode. The three original cues are sequenced from oscillators in JavaScript; there are no embedded audio files or third-party samples. Frequency bars in the Music screen read the live Web Audio analyser output while playing. All sound/visual patterns are original demo code and can be treated as CC0/public-domain demo material.
+The optional section after the hardware shows an inline Optical Bench still, an interactive 12-second generated vector-animation loop, and the same live synthesizer used in Music mode. Each original cue is a 10-second oscillator/noise sequence rendered by Web Audio and looped three times for an exact 30-second track. The two alternate tracks are generated on demand from the same core with randomized pitch, swing, filter-cutoff and voicing parameters; no audio files or third-party samples are used. The output passes through the master-volume gain, five peaking EQ bands, a filter sweep, an optional stereo panner, then an `AnalyserNode`. Music spectrum bars read live frequency bins; tape-reel speed and input VU bars read time-domain RMS/peak and spectral-band levels. Pause and zero volume collapse those visuals with the analyser signal. Hardware-button tick sounds are also synthesized when enabled in System setup. All synth and visual patterns are original project code.
 
 ## Implementation and checks
 
 Everything ships in `index.html`: styles, Canvas 2D screen renderer, UI/state logic, procedural video-like canvas, and Web Audio synth. No external JS or media paths are required. The page maintains a 480×272 display backing canvas and updates with `requestAnimationFrame`.
 
 Smoke checks run for JavaScript syntax and simulated browser interactions across all eight screens, including Home → Movie, the last carousel item → Setup, synth play/track cycling, and HOLD input lock. Browser-specific audio output still depends on a modern browser with Web Audio support and a user gesture to start sound.
+
+## Reference notes
+
+- [Teenage Engineering OP-1 Ableton Live control-surface repository](https://github.com/teenageengineering/op-1-ableton-live-control-surface) was checked as a public instrument-control reference; it does not provide a reusable OP-1 GUI. No TE graphics or source assets are copied.
+- [Teenage Engineering LASP](https://github.com/teenageengineering/Lasp) documents low-latency RMS, peak, waveform and three-band audio analysis. Its analysis concepts informed the native Web Audio `AnalyserNode` path here; the Unity plugin is not a runtime dependency.
+
+The prototype borrows only broad instrument-design principles—legible telemetry, sparse geometric lines, tactile color-coded soft keys and direct control feedback—rather than copying a product interface.
