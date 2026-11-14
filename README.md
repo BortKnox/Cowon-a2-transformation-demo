@@ -1,45 +1,49 @@
-# Cowon A2 / Field OS
+# Cowon A2 — Field OS simulator
 
-An independent, zero-runtime-dependency HTML5 hardware simulator and interface study for the 2005 Cowon iAUDIO A2. The visual language takes cues from compact Teenage Engineering instruments: black LCD, crisp monospaced telemetry, hard 1 px vector lines, aluminum chassis, and orange / cyan / lime controls.
+An independent, zero-runtime-dependency HTML5 interface study for the 2005 Cowon iAUDIO A2. The **device screen is the product**: a strict 480×272 black Canvas UI with a five-tile moving carousel, eight actual mode pages, hardware/key controls, live telemetry and generated content. The optional demo-media reel is below the chassis and can be ignored while operating the simulator.
 
-## Run the demo
+## Run it
 
-The easiest way to try it is to serve the repository root locally (the music and video are separate, original media files):
+Serve the repository root so the browser treats the page as an application:
 
 ```sh
 python3 -m http.server 4173
 ```
 
-Then open <http://localhost:4173> in a modern browser. No npm install, build step, network access, or browser extension is required. Audio starts only after a user presses Play or enters Music mode and presses Enter, in keeping with browser autoplay rules.
+Open <http://localhost:4173>. The simulator, generated still, video-like animation, and procedural music are all inline in `index.html`: there are no asset downloads, npm packages, network requests, or build steps. Sound is synthesized in-browser with Web Audio after a user gesture (browsers block automatic audio playback).
 
-## Controls
+## Hardware controls
 
-| Hardware | Keyboard | Action |
+| Physical control | Keyboard | Behavior |
 | --- | --- | --- |
-| Four-way joystick | Arrow keys | Navigate, tune, pan, or change settings |
-| Center click | Enter | Select / play / pause |
-| Back button | Escape or Backspace | Return one level |
-| Soft key A | `1` | Current screen's orange action |
-| Soft key B | `2` | Current screen's cyan action |
-| Soft key C | `3` | Current screen's lime action |
-| Slide switch | Click LCD / AV-OUT / HOLD | Resume LCD, show AV output, or lock hardware inputs |
+| Four-way joystick | Arrow keys | Navigate the home carousel and operate the current mode |
+| Center click | Enter | Open, play/pause, or select the focused item |
+| Back | Escape / Backspace | Return to the previous screen |
+| A / B / C soft keys | `1` / `2` / `3` | Context-sensitive orange / cyan / lime actions |
+| LCD / AV-OUT / HOLD slide | Click one of the three hardware positions | Change output or lock all hardware/key inputs |
+| Display tile | Click a visible home tile | Open that mode directly |
 
-In Music mode, left/right cycle through the three original tracks; Enter toggles playback; A cycles BBE/EQ presets; B changes repeat mode; C toggles the A-B loop marker. A separate player below the chassis provides mouse/touch controls for the tracks. The other screens include Movie, Music, Photo/RAW, Text, Radio, Record, Browser/USB Host, and Setup.
+On HOME, left/right move the five-tile window across all eight modes; the focused tile remains on-screen. Enter opens it. A/B/C are quick jumps to Music, Playlists, and Browser bookmarks.
 
-## Demo media
+## Screen map and actions
 
-- **Three playable, loopable synth cues:** Signal Path, Tangerine Circuit, and Night Drive (`assets/audio/`).
-- **Demo still:** Optical Bench RAW viewer (`assets/field-os-still.svg`).
-- **Demo video:** silent, six-second looping tape-deck animation (`assets/field-os-demo.webm`).
-- All media is original work created for this demo and dedicated to the public domain under CC0 1.0; see [`assets/README.md`](assets/README.md) for provenance. The audio can be regenerated with the Python standard-library script `tools/generate_demo_audio.py`.
+1. **MOVIE** — generated moving vector reel; Enter play/pause, left/right scrub, A aspect, B subtitles, C soundtrack.
+2. **MUSIC** — animated tape deck and frequency-reactive spectrum. Left/right cycle three original procedural tracks (about 27–30 seconds each); Enter plays/pauses; A changes synth/EQ voicing, B repeat/shuffle, C marks/clears an A–B loop; up/down changes output volume.
+3. **PHOTO** — generated RAW-style frame; A rule-of-thirds grid, B zoom, joystick pan, C next frame; live RGB histogram and camera telemetry.
+4. **TEXT** — paged field notes with scrolling, font sizing, markers and bookmarks.
+5. **RADIO** — FM dial, 25 presets, tuning/seek, preset selection and record-state trigger.
+6. **RECORD** — MIC / LINE-IN / AV-IN source selection, animated level meters, record toggle, bitrate and auto-sync controls.
+7. **BROWSER** — dual HDD / CF-card panes, multi-select, switch panes and copy marked files into the simulated HDD list.
+8. **SETUP** — eight clearly labelled submenus. Open any category with Enter; up/down chooses an option and left/right changes it. The visible value and setting bar update immediately.
 
-## Implementation
+The A/B/C legend stays at the bottom edge of every screen. The A2 slide switch remains usable in HOLD so the user can unlock the device.
 
-`index.html` contains the application, styling, Canvas drawings and control logic. The screen backing canvas and viewport are both exactly 480×272. The UI is drawn with native Canvas 2D primitives and updated with `requestAnimationFrame`; the chassis, multimedia player, and generated demo media are browser-native. The simulator uses no third-party JavaScript libraries or runtime services.
+## Demo media and sound
 
-## Smoke tests performed
+The optional section after the hardware shows an inline Optical Bench still, an interactive 12-second generated vector-animation loop, and the same live synthesizer used in Music mode. The three original cues are sequenced from oscillators in JavaScript; there are no embedded audio files or third-party samples. Frequency bars in the Music screen read the live Web Audio analyser output while playing. All sound/visual patterns are original demo code and can be treated as CC0/public-domain demo material.
 
-- JavaScript syntax checked with Node.js.
-- All three WAV files checked for mono PCM format, sample rate, and duration.
-- WebM video decoded successfully with FFmpeg during asset generation/verification.
-- All local media references checked for existence.
+## Implementation and checks
+
+Everything ships in `index.html`: styles, Canvas 2D screen renderer, UI/state logic, procedural video-like canvas, and Web Audio synth. No external JS or media paths are required. The page maintains a 480×272 display backing canvas and updates with `requestAnimationFrame`.
+
+Smoke checks run for JavaScript syntax and simulated browser interactions across all eight screens, including Home → Movie, the last carousel item → Setup, synth play/track cycling, and HOLD input lock. Browser-specific audio output still depends on a modern browser with Web Audio support and a user gesture to start sound.
