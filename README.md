@@ -1,5 +1,9 @@
 # Cowon-a2-transformation-demo
 
+## [▶ Open the live demo](https://bortknox.github.io/Cowon-a2-transformation-demo/)
+
+Runs in the browser, nothing to download. Click once (or press any key) to arm audio, press Enter on MUSIC, then Enter again to play.
+
 Single-file simulator of the Cowon iAUDIO A2 with a Teenage Engineering-style firmware UI.
 Open `index.html` in a browser. No dependencies, no build step.
 
