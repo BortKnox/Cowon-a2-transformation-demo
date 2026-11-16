@@ -54,6 +54,10 @@ Details, signing rules and the release checklist: [docs/PACKAGING.md](docs/PACKA
 device. Drop a video into the inbox and it produces a 480×272 XviD + MP3 AVI the A2 can play. Python + FFmpeg,
 no telemetry. The canvases imagine the A2's future; this keeps the hardware useful today.
 
+[Download v1.0.0 (Windows ZIP)](https://github.com/BortKnox/Cowon-a2-transformation-demo/releases/download/a2vf-v1.0.0/a2-video-forge-1.0.0-windows.zip) ·
+[release notes](https://github.com/BortKnox/Cowon-a2-transformation-demo/releases/tag/a2vf-v1.0.0) ·
+[source](tools/a2-video-forge/README.md)
+
 ## Repo layout
 
 ```

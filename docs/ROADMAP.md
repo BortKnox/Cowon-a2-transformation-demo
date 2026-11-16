@@ -69,6 +69,16 @@ can reach it without a USB interface.
 
 These are deliberately last. Each one has a gate that money, hardware access or platform rules control, not effort.
 
+## Companion tool — A2 Video Forge
+
+Shipped separately from the canvases ([tools/a2-video-forge](../tools/a2-video-forge/README.md)): it keeps
+real A2 hardware useful while the app is still being designed.
+
+- [x] v1.0.0 — Windows folder-watching transcoder to 480×272 XviD + MP3 AVI
+- [ ] Remove the FFmpeg install step: bundle an FFmpeg build or ship a single `.exe`
+- [ ] Per-firmware presets and a small test matrix, so "will this file play on my A2?" has an answer
+- [ ] Multi-folder watch and real progress reporting (probe source duration)
+
 ## Not building yet
 
 - Accounts, cloud sync, telemetry, analytics: none. The app runs offline and the site has no trackers.

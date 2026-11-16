@@ -37,9 +37,8 @@ No pip packages. The GUI is Tkinter, which ships with standard Windows Python.
 2. Install FFmpeg (for example the *release essentials* build from <https://www.gyan.dev/ffmpeg/builds/>),
    extract somewhere permanent such as `C:\Tools\ffmpeg` — the binary ends up at
    `C:\Tools\ffmpeg\bin\ffmpeg.exe`.
-3. Download the release ZIP from this repo's
-   [Releases](https://github.com/BortKnox/Cowon-a2-transformation-demo/releases) and extract it to a permanent
-   folder, e.g. `C:\Tools\A2VideoForge`.
+3. Download the [v1.0.0 Windows ZIP](https://github.com/BortKnox/Cowon-a2-transformation-demo/releases/download/a2vf-v1.0.0/a2-video-forge-1.0.0-windows.zip)
+   and extract it to a permanent folder, e.g. `C:\Tools\A2VideoForge`.
 4. Double-click `Run_A2_Video_Forge.bat`.
 5. If FFmpeg is not detected automatically, click **LOCATE** and point it at `ffmpeg.exe`.
 
