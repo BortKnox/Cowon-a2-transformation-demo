@@ -39,12 +39,20 @@ Two systems, deliberately separate:
 |---|---|---|---|
 | Canvas folder | `vN` | `v4/` | design iteration, published as a demo |
 | Release tag | `v0.N.P` | `v0.4.0` | shipped artifact built from canvas `N` |
+| Tool release tag | `a2vf-vX.Y.Z` | `a2vf-v1.0.0` | companion tool in `tools/`, versioned independently |
 
 While the project is pre-1.0 the major stays `0`. The minor tracks the canvas number; the patch counts
 rebuilds or fixes for that same canvas (e.g. `v0.4.1` = another APK from the same design). When the app is
 store-ready and the canvas stops changing every week, the first `v1.0.0` can be cut.
 
 Tags are annotated and prefixed with `v`: `git tag -a v0.4.0 -m "Android: first installable build"`.
+
+## Companion tool releases
+
+`tools/a2-video-forge/` ships on its own schedule. Zip the folder, tag `a2vf-v1.0.0`, attach
+`a2-video-forge-1.0.0-windows.zip`, and state the FFmpeg requirement in the release notes — the tool cannot
+run without an FFmpeg build containing `libxvid` and `libmp3lame`, and that is the first question every user
+will have.
 
 ## Artifact names
 
@@ -57,6 +65,7 @@ Predictable names make the download page readable and scripts simple:
 | Windows | `cowon-te-0.4.0-windows-x64.zip` (or `.msi`) |
 | macOS | `cowon-te-0.4.0-macos-arm64.dmg` |
 | Linux | `cowon-te-0.4.0-linux-x86_64.AppImage` |
+| A2 Video Forge (Windows) | `a2-video-forge-1.0.0-windows.zip` |
 | Checksums | `SHA256SUMS.txt` |
 
 Attach the source that produced the build to the Release as well — GitHub's automatic
