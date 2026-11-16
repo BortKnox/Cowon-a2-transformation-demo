@@ -1590,8 +1590,14 @@ const Record = {
       Modal.open('SAVED ' + it.name + '  ' + it.dur.toFixed(1) + 'S', ['SEND TO LOOP', 'SEND TO SESSION', 'PLAY', 'KEEP IN BROWSER'], i => { if (i === 0) { X.loopLoad(it); Screens.go('loop'); } else if (i === 1) it.ses = true; else if (i === 2) X.playRec(it); });
     }
     const label = { IDLE: 'IDLE', ARMED: 'ARMED', REC: 'RECORDING', FINAL: 'FINALISING' }[R.state];
-    if (R.state === 'REC') G.fill(8, 24, 10, 10, blink ? COL.A : '#3A1500'); else if (R.state === 'ARMED') G.box(8, 24, 10, 10, COL.A);
-    G.text(label, 24, 33, R.state === 'REC' || R.state === 'ARMED' ? COL.A : COL.fg, { bold: true, size: 11 });
+    { const rec = R.state === 'REC', arm = R.state === 'ARMED';
+      if (rec) G.fill(8, 21, 112, 17, blink ? COL.A : hexA(COL.A, 0.7)); else if (arm) G.fill(8, 21, 112, 17, COL.C); else G.box(8, 21, 112, 17, COL.faint);
+      G.text(arm ? 'STANDBY' : label, 70, 33, rec || arm ? '#000' : COL.fg, { bold: true, size: 9, align: 'center' });
+      if (rec) for (let i = 0; i < 8; i++) { const q = i * Math.PI / 4 + t * 6, k = ((i / 8) + (t * 1.5 % 1)) % 1; G.line(130 + Math.cos(q) * 3, 30 + Math.sin(q) * 3, 130 + Math.cos(q) * 6, 30 + Math.sin(q) * 6, hexA(COL.A, 0.25 + 0.75 * (1 - k))); }
+      [['MIC', 160], ['LINE', 196], ['FM', 232]].forEach(([nm, x]) => { const on = R.src === nm, c = on ? COL.fg : COL.faint; G.box(x, 21, 30, 17, c);
+        if (nm === 'MIC') { G.circle(x + 15, 27, 3, c); G.line(x + 15, 30, x + 15, 34, c); G.hl(x + 11, 34, 8, c); }
+        else if (nm === 'LINE') { G.box(x + 8, 25, 14, 8, c); G.circle(x + 15, 29, 2, c); }
+        else { G.box(x + 7, 27, 16, 9, c); G.circle(x + 17, 31.5, 2, c); G.line(x + 9, 27, x + 20, 23, c); } }); }
     G.text(fmtTime(R.dur).slice(0, 7), 368, 33, COL.fg, { bold: true, size: 11, align: 'right' });
     hbar(8, 42, 360, 11, T.rmsL, T.peakL, null, COL.fg); hbar(8, 58, 360, 11, T.rmsR, T.peakR, null, COL.B); G.text('L', 2, 51, COL.fg, { size: 6 }); G.text('R', 2, 67, COL.B, { size: 6 }); dbScale(8, 71, 360);
     G.box(8, 92, 360, 56, COL.faint); G.hl(8, 120, 360, COL.faint); const pl = [], pr = [];
@@ -1715,7 +1721,11 @@ const Sound = {
       const ps = b.params.map((p, j) => (on && j === this.pi ? '[' : '') + p.n + ' ' + (s.v[p.k] > 0 && p.min < 0 ? '+' : '') + s.v[p.k] + p.u + (on && j === this.pi ? ']' : '')).join('  ');
       G.text(ps, 364, y + 8, c, { align: 'right', size: 6 });
     });
-    let x = 8; G.text('SRC', x, 160, COL.dim, { size: 6 }); x += 17; BLK.forEach(b => { const on = XS.blocks[b.id].on && !XS.flat && !XS.bypass, w = G.tw(b.id, 6) + 3; G.text('>', x, 160, COL.faint, { size: 6 }); x += 4; G.text(b.id, x, 160, on ? COL.C : COL.faint, { size: 6, bold: on }); x += w; }); G.text('>OUT', x, 160, COL.dim, { size: 6 });
+    { const ids = ['SRC'].concat(BLK.map(b => b.id), [XS.route]), bw = 23, gp = 3, y0 = 152, hh = 12, dead = XS.flat || XS.bypass, tot = ids.length * bw + (ids.length - 1) * gp;
+      G.hl(8, y0 + hh / 2, tot, XS.flat ? COL.C : COL.faint);
+      ids.forEach((id, i) => { const x = 8 + i * (bw + gp), blk = i > 0 && i < ids.length - 1 ? XS.blocks[id] : null, on = blk && blk.on && !dead, sel = blk && BLK[this.sel].id === id, c = on ? COL.C : (i === 0 || i === ids.length - 1) ? COL.fg : COL.dim;
+        G.fill(x, y0, bw, hh, on ? hexA(COL.C, 0.16) : '#000'); G.box(x, y0, bw, hh, sel ? COL.fg : c); G.text(id, x + bw / 2, y0 + 8.5, sel ? COL.fg : c, { size: 4.5, align: 'center', bold: on }); });
+      if (Engine.A.rmsM > 0.01) { const px_ = 8 + ((Dev.t * 70) % tot); G.circle(px_, y0 + hh + 4, 1.5, COL.B, COL.B); } }
     if (XS.flat) { G.fill(8, 167, 360, 13, COL.C); G.text('FLAT / CLEAN PATH: NO EQ, NO BBE, NO COLOUR', 188, 176, '#000', { bold: true, align: 'center', size: 7 }); }
     else if (XS.bypass) { G.fill(8, 167, 360, 13, COL.A); G.text('GLOBAL BYPASS: ALL BLOCKS OFF (STATES KEPT)', 188, 176, '#000', { bold: true, align: 'center', size: 7 }); }
     else { G.box(8, 167, 360, 13, COL.faint); G.text(X.nActive() + ' BLOCK(S) ACTIVE   PRESET ' + X.presetName() + '   ROUTE ' + ROUTE_LONG[XS.route], 12, 176, COL.fg, { size: 7 }); }
@@ -1942,11 +1952,16 @@ const Time = {
   draw(A, dt) {
     const d = new Date(), V = ['CLOCK', 'TIMER', 'STOPWATCH', 'ALARM', 'CALENDAR'][this.view]; header('TIME', V);
     if (this.view === 0) {
-      const cx_ = 110, cy_ = 128, r = 76; G.circle(cx_, cy_, r, COL.fg); for (let i = 0; i < 60; i++) { const an = i * Math.PI / 30 - Math.PI / 2, l = i % 5 ? 3 : 7; G.line(cx_ + (r - l) * Math.cos(an), cy_ + (r - l) * Math.sin(an), cx_ + r * Math.cos(an), cy_ + r * Math.sin(an), i % 5 ? COL.dim : COL.fg); }
-      const s = d.getSeconds() + d.getMilliseconds() / 1000, m = d.getMinutes() + s / 60, h = d.getHours() % 12 + m / 60, hand = (v, n, len, c) => { const an = v / n * Math.PI * 2 - Math.PI / 2; G.line(cx_, cy_, cx_ + len * Math.cos(an), cy_ + len * Math.sin(an), c); };
-      hand(h, 12, 40, COL.fg); hand(m, 60, 62, COL.fg); hand(s, 60, 68, COL.A); G.circle(cx_, cy_, 3, COL.fg, COL.fg);
-      G.text(hhmmss(d), 200, 80, COL.fg, { bold: true, size: 24 }); G.text(d.toDateString().toUpperCase(), 200, 100, COL.dim); G.text('LOCAL TIME ' + (-d.getTimezoneOffset() / 60 >= 0 ? '+' : '') + (-d.getTimezoneOffset() / 60) + 'H', 200, 114, COL.faint, { size: 7 });
-      G.text('TIMER ' + (TM.timer.run ? fmtTime(TM.timer.left).slice(0, 5) : 'OFF') + '   ALARM ' + (TM.alarm.on ? pad2(TM.alarm.h) + ':' + pad2(TM.alarm.m) : 'OFF'), 200, 134, COL.dim, { size: 7 });
+      const ds = d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+      G.text(ds, 186, 66, COL.fg, { size: 26, align: 'center' });
+      const ccx = 118, ccy = 116, r = 17; G.circle(ccx, ccy, r, COL.fg);
+      for (let i = 0; i < 12; i++) { const an = i * Math.PI / 6; G.line(ccx + (r - 3) * Math.cos(an), ccy + (r - 3) * Math.sin(an), ccx + r * Math.cos(an), ccy + r * Math.sin(an), COL.dim); }
+      const s = d.getSeconds() + d.getMilliseconds() / 1000, m = d.getMinutes() + s / 60, h = d.getHours() % 12 + m / 60, hand = (v, n, len, c) => { const an = v / n * Math.PI * 2 - Math.PI / 2; G.line(ccx, ccy, ccx + len * Math.cos(an), ccy + len * Math.sin(an), c); };
+      hand(h, 12, 9, COL.fg); hand(m, 60, 14, COL.fg); G.circle(ccx, ccy, 1.5, COL.fg, COL.fg);
+      G.text(pad2(d.getHours()) + (Math.floor(s) % 2 ? ' ' : ':') + pad2(d.getMinutes()), 150, 128, COL.fg, { size: 30 });
+      G.hl(60, 150, 252, COL.faint); G.fill(60, 149, 252 * s / 60, 2, COL.A);
+      G.text('ALARM ' + (TM.alarm.on ? pad2(TM.alarm.h) + ':' + pad2(TM.alarm.m) : 'OFF'), 60, 166, TM.alarm.on ? COL.A : COL.dim, { size: 7 });
+      G.text('TIMER ' + (TM.timer.run ? fmtTime(TM.timer.left).slice(0, 5) : 'OFF'), 312, 166, TM.timer.run ? COL.A : COL.dim, { size: 7, align: 'right' });
     } else if (this.view === 1) {
       const T = TM.timer, mm = Math.floor(T.left / 60), ss = Math.floor(T.left % 60); G.text(pad2(mm) + ':' + pad2(ss), 188, 100, T.run ? COL.A : COL.fg, { bold: true, size: 40, align: 'center' });
       G.box(28, 120, 320, 10, COL.faint); G.fill(29, 121, 318 * (T.set ? T.left / T.set : 0), 8, T.run ? COL.A : COL.fg); G.text('SET ' + fmtTime(T.set).slice(0, 5) + '   ' + (T.run ? 'RUNNING' : T.left === 0 ? 'DONE' : 'READY'), 28, 146, COL.dim); G.text('LEFT/RIGHT ±10S   UP/DOWN ±1M (WHEN STOPPED)', 28, 160, COL.faint, { size: 6 });
@@ -2581,10 +2596,14 @@ const Usb = {
       G.hl(8, 98, 360, COL.faint);
       G.text('VBUS', 8, 112, COL.dim, { size: 6 }); G.text((this.mounted ? '5.0V  ' + Math.round(120 + 380 * (this.xfer ? 1 : 0.25)) + 'MA' : '5.0V  0MA'), 8, 122, COL.fg, { size: 7 });
       G.text('HOST MODE COST', 8, 138, COL.dim, { size: 6 }); G.text('+' + (this.mounted ? '500MW TO THE BUDGET' : '0MW'), 8, 148, this.mounted ? COL.A : COL.dim, { size: 7 });
-      G.text('A2 IS BOTH: DEVICE TO A PC, HOST TO A CAMERA.', 8, 168, COL.faint, { size: 6 });
-      G.text('THE 2006 HOST STACK IS STORAGE + PTP. NO HUB, NO HID.', 8, 178, COL.faint, { size: 6 });
-      G.text('THIS IS HOW THE PLUGIN TALKS TO THE UNIT: PLAIN MSC.', 8, 192, COL.C, { size: 6, bold: true });
-      G.text('A = MOUNT / EJECT   B = COPY   C = VERIFY', 8, 206, COL.faint, { size: 6 });
+      { const up = this.mounted, ay = 112, hostRole = UDEV[this.sel].role === 'HOST', lc = up ? (this.xfer ? COL.A : COL.C) : COL.faint;
+        G.box(126, ay, 58, 40, COL.fg); G.box(131, ay + 5, 36, 24, COL.dim); G.circle(175, ay + 17, 5, COL.fg); G.text('A2', 155, ay + 52, COL.fg, { size: 7, align: 'center' });
+        G.hl(184, ay + 20, 78, COL.faint); if (up) for (let i = 0; i < 6; i++) { const x = 184 + ((i * 13 + Dev.t * 30 * (this.xfer ? 2 : 1)) % 78); G.fill(x, ay + 19, 6, 2, lc); }
+        G.text(up ? (hostRole ? 'HOST' : 'MSC') : 'NO LINK', 223, ay + 12, up ? lc : COL.dim, { size: 6, align: 'center' });
+        G.box(262, ay, 54, 34, COL.fg); G.box(266, ay + 4, 46, 24, COL.dim); G.hl(254, ay + 38, 70, COL.fg); G.text(hostRole ? 'CAMERA' : 'PC / MAC', 289, ay + 52, COL.fg, { size: 7, align: 'center' });
+        ['DEVICE', 'HOST'].forEach((m, i) => { const on = (m === 'HOST') === hostRole, x = 126 + i * 66; if (on) G.fill(x, 176, 60, 13, COL.fg); else G.box(x, 176, 60, 13, COL.faint); G.text(m, x + 30, 185, on ? '#000' : COL.dim, { size: 7, bold: true, align: 'center' }); }); }
+      G.text('MSC IS HOW THE PLUGIN TALKS TO THE UNIT.', 8, 206, COL.faint, { size: 6 });
+      G.text('A = MOUNT / EJECT   B = COPY   C = VERIFY', 8, 218, COL.faint, { size: 6 });
     } else if (this.view === 1) {
       const x = this.xfer;
       G.text(x ? 'COPYING ' + x.n : 'NO TRANSFER', 8, 32, x ? COL.A : COL.dim, { bold: true, size: 8 });
