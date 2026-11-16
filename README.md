@@ -65,7 +65,7 @@ index.html        # project hub — the GitHub Pages root
 v1/ v2/ v3/ v4/   # frozen canvases, one per version, never edited
 versions/         # gallery linking every canvas
 assets/           # chassis cut-out and preview images
-docs/             # ROADMAP.md, PACKAGING.md
+docs/             # ROADMAP.md, PACKAGING.md, V5-BRIEF.md
 tools/            # chassis cut-out script, a2-video-forge/ (Windows transcoder)
 CONTRIBUTING.md   # the rules for adding a version
 ```
@@ -88,6 +88,7 @@ then open <http://localhost:8000/>).
 
 - [docs/ROADMAP.md](docs/ROADMAP.md) — the phases, the open questions, and what is deliberately not built yet.
 - [docs/PACKAGING.md](docs/PACKAGING.md) — versioning, artifact names, signing and the release checklist.
+- [docs/V5-BRIEF.md](docs/V5-BRIEF.md) — the scope, canon, naming and references for the v5 guitar/vocal rig canvas.
 - [CONTRIBUTING.md](CONTRIBUTING.md) — how a new canvas version gets added.
 
 ## License
