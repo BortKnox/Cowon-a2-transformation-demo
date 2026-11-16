@@ -10,10 +10,26 @@ How this repo stays a source repository while shipping installable builds, and t
 2. **Canvas folders are frozen.** `v1/` … `v4/` are design history. Fixes ship in the next folder, not by
    editing an old one.
 3. **Pages serves source, not builds.** The site at
-   <https://bortknox.github.io/Cowon-a2-transformation-demo/> is this repository's own HTML, deployed from
-   `main` (root). There is no separate build step to break.
+   <https://bortknox.github.io/Cowon-a2-transformation-demo/> is this repository's own HTML. There is no
+   separate build step to break — see [Publishing](#publishing) for which branch is served.
 4. **Nothing secret is stored here.** Keystores, passwords and tokens live on the machine that signs, and in
    GitHub *Secrets* if CI ever signs automatically.
+
+## Publishing
+
+GitHub Pages builds **one branch, one folder**, chosen in *Settings → Pages*. That branch is what the world
+sees; a push to a different branch changes the repo but not the live site. This is the single most common
+way a Pages project silently goes stale.
+
+- **Intended setting:** *Deploy from a branch* → `main` → `/ (root)`. The hub is `index.html`, the canvases
+  are the `vN/` folders, and Pages serves the committed files unchanged.
+- **If another branch is selected**, either point Pages back at `main`, or fast-forward that branch to `main`
+  after every site change (`git push origin main:<branch>`). Two branches drifting apart is how the site
+  ends up showing a version that no longer exists in the repo.
+- **Never rename the repo or the Pages path casually** — every demo link is public and the URLs are the
+  product's address.
+- No `.nojekyll` is needed: there are no underscored files and no Jekyll-specific syntax in use, but if a
+  future folder starts with `_` or contains `{{ }}`-style text, add an empty `.nojekyll` at the root.
 
 ## Version numbers
 
