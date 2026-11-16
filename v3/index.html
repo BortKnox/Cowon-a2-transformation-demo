@@ -6,7 +6,7 @@
 <title>COWON A2 — TE BENCH V3</title>
 <style>
 :root{
-  --bench:#E4E4E0; --grid:#D2D2CD; --ink:#111; --dim:#7A7A75; --org:#FF5A00; --cya:#00E5FF; --lim:#76FF03;
+  --bench:#E4E4E0; --grid:#D2D2CD; --ink:#111; --dim:#7A7A75; --org:#FF6A1F; --cya:#7FB0D8; --lim:#8CCBA6;
   --mono:"SF Mono","JetBrains Mono","DejaVu Sans Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -848,7 +848,8 @@ const X = (() => {
    ===================================================================== */
 const $ = s => document.querySelector(s);
 const MONO = '"SF Mono","JetBrains Mono","DejaVu Sans Mono",Menlo,Consolas,"Liberation Mono",monospace';
-const COL = { fg: '#F2F2F2', dim: '#7A7A7A', faint: '#2E2E2E', A: '#FF5A00', B: '#00E5FF', C: '#76FF03' };
+const COL = { fg: '#ECEAE4', dim: '#77766F', faint: '#2B2B29', A: '#FF6A1F', B: '#7FB0D8', C: '#8CCBA6' };
+const hexA = (h, a) => 'rgba(' + parseInt(h.slice(1, 3), 16) + ',' + parseInt(h.slice(3, 5), 16) + ',' + parseInt(h.slice(5, 7), 16) + ',' + a + ')';
 const SW = 480, SH = 272;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -1137,13 +1138,13 @@ const Music = {
     if (k === 'BACK') { if (kind === 'tap') Screens.back(); return true; }
     if (k === 'OK' && kind === 'hold') { Engine.abStep(); return true; }
     if (transportKeys(k, kind)) return true;
-    if (kind === 'down') { if (k === 'A') { X.openSound(); return true; } if (k === 'B') { this.view = (this.view + 1) % 4; return true; } if (k === 'C') { Engine.cycleLoop(); return true; } }
+    if (kind === 'down') { if (k === 'A') { X.openSound(); return true; } if (k === 'B') { this.view = (this.view + 1) % 6; return true; } if (k === 'C') { Engine.cycleLoop(); return true; } }
     return false;
   },
   draw(A, dt) {
     const T = Engine.tracks[ES.idx], pos = ES.pos, prog = pos / TRACK_SEC, pl = ES.playing && ES.source === 'track';
     header('MUSIC', 'TRK 0' + (ES.idx + 1) + '/0' + Engine.tracks.length + ' ' + T.name.slice(6));
-    if (this.view === 0) this.deck(A, dt, prog); else if (this.view === 1) this.spec(A, dt); else if (this.view === 2) this.scope(A); else this.tech(A);
+    if (this.view === 0) this.deck(A, dt, prog); else if (this.view === 1) this.tape(A, dt, prog, pl); else if (this.view === 2) this.tone(A, dt); else if (this.view === 3) this.spec(A, dt); else if (this.view === 4) this.scope(A); else this.tech(A);
     for (let i = 0; i < 3; i++) G.text('L' + (i + 1), 8 + i * 120 + 60, 207, pl && Math.min(2, Math.floor(pos / 10)) === i ? COL.C : COL.dim, { align: 'center', size: 7 });
     G.box(8, 210, 360, 9, COL.dim); G.fill(9, 211, 358 * prog, 7, pl ? COL.fg : COL.dim); { const ab = ES.ab; if (ab.a != null) G.fill(8 + 358 * ab.a / TRACK_SEC, 207, 2, 15, COL.B); if (ab.b != null) G.fill(8 + 358 * ab.b / TRACK_SEC, 207, 2, 15, COL.B); } G.vl(128, 210, 9, COL.C); G.vl(248, 210, 9, COL.C);
     iconTransport(8, 224, pl ? 'play' : pos > 0 ? 'pause' : 'stop', COL.fg);
@@ -1152,7 +1153,7 @@ const Music = {
     G.text('BPM ' + T.bpm + '  ROOT ' + noteName(T.root) + '  CUT ' + Math.round(T.p.cut) + 'HZ  SWP ' + T.p.sweep.toFixed(1) + 'OCT  SWG ' + Math.round(T.p.swing * 100) + '%  SEED ' + T.seed, 8, 243, COL.dim);
     G.text('SEC ' + (sch.sec + 1) + '/3  STEP ' + String(sch.step + 1).padStart(3, '0') + '/' + T.totalSteps + '  EQ ' + EQN() + '  SRC ' + ES.source.toUpperCase(), 8, 253, COL.dim);
     G.text('RMS ' + dB(A.rmsM) + 'DB  PK ' + dB(Math.max(A.peakL, A.peakR)) + 'DB  F0 ' + (A.peakBin ? Math.round(A.peakBin * A.binHz) + 'HZ' : '---') + '  CORR ' + A.corr.toFixed(2), 8, 263, COL.fg);
-    rail({ up: 'VOL+', down: 'VOL-', left: 'PREV', right: 'NEXT', ok: pl ? 'PAUSE' : 'PLAY', back: 'HOME', a: 'SND ' + EQN(), b: 'VIEW ' + ['DECK', 'SPEC', 'SCOPE', 'TECH'][this.view], c: 'LOOP ' + LOOP_NAMES[ES.loop] });
+    rail({ up: 'VOL+', down: 'VOL-', left: 'PREV', right: 'NEXT', ok: pl ? 'PAUSE' : 'PLAY', back: 'HOME', a: 'SND ' + EQN(), b: 'VIEW ' + ['DECK', 'TAPE', 'TONE', 'SPEC', 'SCOPE', 'TECH'][this.view], c: 'LOOP ' + LOOP_NAMES[ES.loop] });
   },
   deck(A, dt, prog) {
     this.lvl += (Math.min(1, A.rmsM / 0.25) - this.lvl) * (1 - Math.exp(-dt / 0.08));
@@ -1187,6 +1188,49 @@ const Music = {
     for (let i = 0; i < n; i++) { const h = Math.max(1, Math.round(b[i] * mh)); G.fill(x0 + i * pitch, base - h, 5, h, COL.fg); G.fill(x0 + i * pitch, base - this.peak[i] * mh - 2, 5, 1, COL.A); }
     [[100, '100'], [1000, '1K'], [10000, '10K']].forEach(f => { const x = x0 + n * Math.log(f[0] / 40) / Math.log(400) * pitch; G.vl(x, base + 1, 3, COL.dim); G.text(f[1], x, base + 11, COL.dim, { align: 'center', size: 6 }); });
     G.text('SPECTRUM 40HZ-16KHZ  ' + n + ' BANDS  F0 ' + (A.peakBin ? Math.round(A.peakBin * A.binHz) + 'HZ' : '---'), 8, 22, COL.dim, { size: 7 });
+  },
+  tape(A, dt, prog, pl) {
+    this.rot = this.rot || [0, 0]; this.nl = this.nl || 0; this.nr = this.nr || 0;
+    const Rmin = 15, Rmax = 43, rl = Rmin + (Rmax - Rmin) * (1 - prog), rr = Rmin + (Rmax - Rmin) * prog, cy = 76, cl = 84, cr = 288;
+    const sp = pl ? 5.2 : 0; this.rot[0] += dt * sp * (Rmax / rl) * 0.45; this.rot[1] += dt * sp * (Rmax / rr) * 0.45;
+    [[cl, rl, this.rot[0], COL.B], [cr, rr, this.rot[1], COL.C]].forEach(([x, R, a, c]) => {
+      G.circle(x, cy, R, COL.dim); G.circle(x, cy, R - 3, COL.faint); G.circle(x, cy, 13, c);
+      for (let i = 0; i < 3; i++) { const q = a + i * 2.094; G.line(x + Math.cos(q) * 4, cy + Math.sin(q) * 4, x + Math.cos(q) * 12, cy + Math.sin(q) * 12, c); }
+      G.circle(x, cy, 3, c, c);
+    });
+    // tape path: supply -> idler -> head -> idler -> take-up
+    const hx = (cl + cr) / 2, hy = 150, i1 = [cl + 30, 138], i2 = [cr - 30, 138], col = pl ? COL.fg : COL.dim;
+    G.line(cl - rl, cy, cl - rl, cy + 6, col); G.poly([[cl - rl, cy + 6], [cl - 38, 128], i1, [hx - 14, hy], [hx + 14, hy], i2, [cr + 38, 128], [cr + rr, cy + 6]], col);
+    G.circle(i1[0], i1[1], 3, COL.dim); G.circle(i2[0], i2[1], 3, COL.dim);
+    G.fill(hx - 12, hy - 1, 24, 8, pl ? COL.A : COL.faint); G.box(hx - 12, hy - 1, 24, 8, COL.dim);
+    // counter + state
+    G.text(fmtTime(ES.pos).slice(0, 5) + ':' + String(Math.floor((ES.pos % 1) * 100)).padStart(2, '0'), hx, 30, pl ? COL.fg : COL.dim, { size: 12, bold: true, align: 'center' });
+    G.text(pl ? (ES.loop ? 'PLAY  LOOP' : 'PLAY') : 'STOP', hx, 42, pl ? COL.C : COL.dim, { size: 7, bold: true, align: 'center' });
+    // VU dials
+    this.nl += (clamp(A.peakL * 1.4, 0, 1) - this.nl) * Math.min(1, dt * 9); this.nr += (clamp(A.peakR * 1.4, 0, 1) - this.nr) * Math.min(1, dt * 9);
+    [[44, 'L', this.nl, COL.B], [328, 'R', this.nr, COL.C]].forEach(([x, nm, v, c]) => {
+      const y = 198, r = 26; G.arc(x, y, r, Math.PI, Math.PI * 2, COL.dim); G.arc(x, y, r, Math.PI * 1.78, Math.PI * 2, COL.A, 2);
+      for (let i = 0; i <= 6; i++) { const q = Math.PI + i * Math.PI / 6; G.line(x + Math.cos(q) * (r - 3), y + Math.sin(q) * (r - 3), x + Math.cos(q) * r, y + Math.sin(q) * r, COL.dim); }
+      const q = Math.PI + v * Math.PI; G.line(x, y, x + Math.cos(q) * (r - 4), y + Math.sin(q) * (r - 4), v > 0.85 ? COL.A : c); G.circle(x, y, 2, c, c); G.text(nm, x, y + 8, COL.dim, { size: 6, align: 'center' });
+    });
+    // timeline ticks
+    for (let i = 0; i <= 30; i++) G.vl(86 + i * 6.7, 172, i % 10 === 0 ? 8 : 4, i / 30 <= prog ? COL.fg : COL.faint);
+    G.fill(86 + 201 * prog - 1, 169, 3, 14, COL.A);
+  },
+  tone(A, dt) {
+    this.tv = this.tv || [0, 0, 0]; const raw = [A.bass, A.mid, A.high];
+    for (let i = 0; i < 3; i++) this.tv[i] += (clamp(raw[i] * 2.2, 0, 1) - this.tv[i]) * Math.min(1, dt * 10);
+    const defs = [['LOW', 72, COL.B], ['MID', 186, COL.C], ['HIGH', 300, COL.fg]];
+    defs.forEach(([nm, x, c], i) => {
+      const v = this.tv[i], f = hexA(c, 0.08 + 0.5 * v), y0 = 64;
+      if (i === 0) { cx.beginPath(); cx.ellipse(x, y0 + 4, 24, 8, 0, 0, Math.PI * 2); cx.fillStyle = f; cx.fill(); cx.strokeStyle = c; cx.lineWidth = 1 / sc; cx.stroke(); G.line(x - 24, y0 + 4, x - 24, y0 + 62, c); G.line(x + 24, y0 + 4, x + 24, y0 + 62, c); cx.beginPath(); cx.ellipse(x, y0 + 62, 24, 8, 0, 0, Math.PI); cx.strokeStyle = c; cx.stroke(); }
+      else if (i === 1) { G.poly([[x - 22, y0 + 14], [x, y0 + 2], [x + 22, y0 + 14], [x, y0 + 26]], c, true, f); G.poly([[x - 22, y0 + 14], [x, y0 + 26], [x, y0 + 64], [x - 22, y0 + 52]], c, true, hexA(c, 0.04 + 0.2 * v)); G.poly([[x + 22, y0 + 14], [x, y0 + 26], [x, y0 + 64], [x + 22, y0 + 52]], c, true, hexA(c, 0.04 + 0.3 * v)); }
+      else { G.poly([[x, y0 - 4], [x - 22, y0 + 56], [x, y0 + 66], [x + 22, y0 + 56]], c, true, f); G.line(x, y0 - 4, x, y0 + 66, c); }
+      G.text(nm, x, 156, c, { size: 9, bold: true, align: 'center' });
+      G.box(x - 20, 162, 40, 5, COL.faint); G.fill(x - 19, 163, 38 * v, 3, v > 0.92 ? COL.A : c);
+    });
+    G.text('BAND ENERGY AFTER THE SOUND CHAIN  ' + X.procLabel(), 8, 186, COL.dim, { size: 6 });
+    G.text('DROP TO FLAT PATH WITH F TO SEE THE UNTREATED SIGNAL', 8, 196, COL.faint, { size: 6 });
   },
   tech(A) {
     const T = Engine.tracks[ES.idx], ab = ES.ab, f = (v, d) => (v == null ? '--' : v.toFixed(d));
