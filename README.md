@@ -1,24 +1,86 @@
-# Cowon-a2-transformation-demo
+# COWON iAUDIO A2 — TE BENCH
 
-## [▶ All versions](https://bortknox.github.io/Cowon-a2-transformation-demo/versions/)
+**A re-imagined COWON iAUDIO A2: part hardware overhaul, part app, part portable music factory.**
 
-| Version | Open | Notes |
+[**Live project hub**](https://bortknox.github.io/Cowon-a2-transformation-demo/) ·
+[**All canvases**](https://bortknox.github.io/Cowon-a2-transformation-demo/versions/) ·
+[**Roadmap**](docs/ROADMAP.md) · [**Releases**](https://github.com/BortKnox/Cowon-a2-transformation-demo/releases)
+
+![COWON iAUDIO A2 v4 canvas — MUSIC screen with tape reels and live level meter](assets/preview-v4.png)
+
+## Status
+
+**Canvas stage.** The project is being designed in the browser first: each version is a single-file,
+self-contained HTML canvas you can operate. No installers exist yet — the first Android APK will be a
+tagged [Release](https://github.com/BortKnox/Cowon-a2-transformation-demo/releases), not a file in this repo.
+
+## Live canvases
+
+| Version | State | What it is | Open |
+|---|---|---|---|
+| **v4** | latest | Current canvas, the largest build yet: the 24-mode structure carried forward with a fuller music screen. Labels inside the file still read V3 — relabelling is a later pass. | [open v4](https://bortknox.github.io/Cowon-a2-transformation-demo/v4/) |
+| **v3** | stable | 24 modes, OP-1 style tape reels, signal-flow sound chain, rebuilt icons, RANK feasibility percentages for the A2 and a PC build. | [open v3](https://bortknox.github.io/Cowon-a2-transformation-demo/v3/) |
+| **v2** | archive | 17 modes. Looper, recorder, sound chain, routing and a status line. | [open v2](https://bortknox.github.io/Cowon-a2-transformation-demo/v2/) |
+| **v1** | archive | The original: real photo chassis, 8 modes. Kept as the reference and the rollback. | [open v1](https://bortknox.github.io/Cowon-a2-transformation-demo/v1/) |
+
+Every canvas runs from the site with nothing to install. Click once (or press any key) to arm audio, then
+press Enter on MUSIC.
+
+## What this is
+
+- **Hardware.** The starting point was a real iAUDIO A2 taken apart and rebuilt with new firmware. The
+  device's own panel — screen window, joystick, soft keys — is reproduced 1:1 in the canvas, so the layout
+  is validated before any port exists.
+- **Canvas.** One HTML file per version: no build step, no dependencies, no network calls. It is where the
+  app is designed and stress-tested in a browser.
+- **Instrument.** Audio is synthesised live with the Web Audio API and the meters read from real analyser
+  nodes. The destination is a production instrument with guitar and vocal processing — not a media-player skin.
+
+## Ports and downloads
+
+| Target | Status | Notes |
 |---|---|---|
-| v3 (latest) | [▶ open](https://bortknox.github.io/Cowon-a2-transformation-demo/v3/) | 24 modes, OP-1 style tape/flow/icons, RANK feasibility % for A2 and PC |
-| v2 | [▶ open](https://bortknox.github.io/Cowon-a2-transformation-demo/v2/) | 17 modes, looper, recorder, sound chain |
-| v1 | [▶ open](https://bortknox.github.io/Cowon-a2-transformation-demo/) | original, kept as reference and rollback |
+| **Web canvas** | available | Every version runs from this repo's Pages site. |
+| **Android (APK)** | planned | First real port. Signed builds attach to a Release. |
+| **iOS** | research | Needs an Apple Developer account and TestFlight; sideloading an IPA is not a normal route. |
+| **Desktop** | planned | Windows first, then macOS and Linux. Where low-latency guitar/vocal input gets serious. |
+| **A2 hardware** | research | The original dream: installable firmware on a physical iAUDIO A2. Still the north star, still unproven. |
 
-New versions go in their own folder (`v4/`, `v5/`...). Nothing is overwritten.
+Details, signing rules and the release checklist: [docs/PACKAGING.md](docs/PACKAGING.md).
 
-Runs in the browser, nothing to download. Click once (or press any key) to arm audio, press Enter on MUSIC, then Enter again to play.
+## Repo layout
 
-Single-file simulator of the Cowon iAUDIO A2 with a Teenage Engineering-style firmware UI.
-Open `index.html` in a browser. No dependencies, no build step.
+```
+index.html        # project hub — the GitHub Pages root
+v1/ v2/ v3/ v4/   # frozen canvases, one per version, never edited
+versions/         # gallery linking every canvas
+assets/           # chassis cut-out and preview images
+docs/             # ROADMAP.md, PACKAGING.md
+tools/            # helper scripts (chassis cut-out regenerator)
+CONTRIBUTING.md   # the rules for adding a version
+```
 
-- `index.html` is the whole demo. The chassis photo is embedded as WebP.
-- `assets/cowon_a2_front.png` is the cut-out of the A2 front panel (transparent outside edge and screen window).
-- `tools/cutout.py` regenerates that cut-out from a front-view photo (needs Pillow, OpenCV, NumPy).
+## Run locally
 
-The 480x272 LCD canvas sits behind the photo's screen window. Audio is synthesised live with the Web Audio API
-(one 10 s core looped 3x, plus two randomised clones, 30 s each) and every on-screen visual reads from AnalyserNodes.
-See the Field Notes section at the bottom of the page for controls and limits.
+Any canvas is a single file — open it directly:
+
+```bash
+git clone https://github.com/BortKnox/Cowon-a2-transformation-demo.git
+cd Cowon-a2-transformation-demo
+start v4/index.html        # Windows
+# open v4/index.html       # macOS
+```
+
+To preview the whole site with working relative links, serve the folder instead (`python -m http.server`,
+then open <http://localhost:8000/>).
+
+## Docs
+
+- [docs/ROADMAP.md](docs/ROADMAP.md) — the phases, the open questions, and what is deliberately not built yet.
+- [docs/PACKAGING.md](docs/PACKAGING.md) — versioning, artifact names, signing and the release checklist.
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how a new canvas version gets added.
+
+## License
+
+Not chosen yet. Until a licence file exists, assume all rights reserved and ask before reusing the code or
+assets. Public visibility is not a licence.
