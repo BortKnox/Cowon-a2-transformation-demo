@@ -15,8 +15,9 @@ Fixes and improvements go into the *next* version folder.
 2. **Create the folder** and put the new canvas at `v5/index.html`.
 3. **Keep it one file.** Inline CSS and JS. No CDN links, no bundler, no external fonts or images — the
    chassis photo must stay embedded as a data URI so the file works offline.
-4. **Label it inside the file.** Update `<title>`, the header version text and the Field Notes heading in
-   the same pass. (v4 still reads "V3" internally; that is the kind of drift to avoid.)
+4. **Label it inside the file.** Update `<title>`, the header version text, the firmware HUD string and the
+   Field Notes heading in the same pass — these drift apart easily, and a canvas that calls itself the wrong
+   version is the fastest way to confuse a bug report.
 5. **Freeze it.** Once pushed, stop editing `v5/index.html`. Further work becomes `v6/`.
 6. **Register it** in `versions/index.html` and in the Live canvases table in `README.md`.
 7. **Add a preview**: screenshot the canvas at **1200×630** and save it as `assets/preview-v5.png`. The hub

@@ -124,6 +124,7 @@ footer a{color:var(--dim)}
   <nav>
     <a href="#demos">DEMOS</a>
     <a href="#ports">PORTS</a>
+    <a href="#tools">TOOLS</a>
     <a href="#status">STATUS</a>
     <a href="#layout">REPO MAP</a>
     <a href="https://github.com/BortKnox/Cowon-a2-transformation-demo">GITHUB</a>
@@ -183,8 +184,8 @@ footer a{color:var(--dim)}
       <tr>
         <td class="nowrap"><b>V4</b></td>
         <td class="nowrap"><span class="pill live">LATEST</span></td>
-        <td class="note">Current canvas, largest build yet: the 24-mode structure carried forward with a fuller
-        music screen. Labels inside the file still read V3 — relabelling is part of the next pass, not this upload.</td>
+        <td class="note">Current canvas: the 24-mode structure carried forward, with ongoing work on input
+        handling and the music screen. The in-page changelog still describes what v3 added.</td>
         <td class="nowrap"><a class="open" href="v4/">▶ OPEN V4</a></td>
       </tr>
       <tr>
@@ -256,8 +257,30 @@ footer a{color:var(--dim)}
   </table>
 </section>
 
+<section id="tools">
+  <h2><span>04</span> COMPANION TOOLS</h2>
+  <table class="tbl">
+    <thead>
+      <tr><th>TOOL</th><th>STATUS</th><th class="note">WHAT IT DOES</th><th>GET IT</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="nowrap"><b>A2 VIDEO FORGE</b></td>
+        <td class="nowrap"><span class="pill live">WINDOWS</span></td>
+        <td class="note">Folder-watching transcoder for the real A2: drop a video in, get a 480×272 XviD + MP3
+        AVI the player can actually handle. Python + FFmpeg, no installers, no telemetry.</td>
+        <td class="nowrap"><a class="open" href="https://github.com/BortKnox/Cowon-a2-transformation-demo/tree/main/tools/a2-video-forge">▶ SOURCE</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="lede" style="margin-top:10px">The canvases imagine the A2's future. This keeps the hardware useful
+  today — and it is the only thing here written for a device you already own. Python users can run it straight
+  from source; a ready-to-run ZIP will be attached to
+  <a href="https://github.com/BortKnox/Cowon-a2-transformation-demo/releases" style="border-bottom:1px solid var(--org);text-decoration:none">Releases</a>.</p>
+</section>
+
 <section id="status">
-  <h2><span>04</span> PROJECT STATUS</h2>
+  <h2><span>05</span> PROJECT STATUS</h2>
   <div class="road">
     <div class="row"><code>M0</code><p>Design canvas in the browser — demos, audio engine, full UI language.</p><span class="st pill live">ONGOING</span></div>
     <div class="row"><code>M1</code><p>Port the canvas into a real app shell; share one UI/audio core across platforms.</p><span class="st pill plan">NEXT</span></div>
@@ -270,13 +293,13 @@ footer a{color:var(--dim)}
 </section>
 
 <section id="layout">
-  <h2><span>05</span> REPO MAP</h2>
+  <h2><span>06</span> REPO MAP</h2>
   <pre class="map"><code>index.html        <span class="c"># this page — the GitHub Pages root</span>
 v1/ … v4/         <span class="c"># frozen canvases, one per version, never edited</span>
 versions/         <span class="c"># gallery that links every canvas</span>
 assets/           <span class="c"># chassis cut-out + preview images</span>
 docs/             <span class="c"># ROADMAP.md, PACKAGING.md</span>
-tools/            <span class="c"># helper scripts (chassis cut-out)</span>
+tools/            <span class="c"># chassis cut-out script, a2-video-forge/</span>
 CONTRIBUTING.md   <span class="c"># the rules for adding a version</span></code></pre>
   <p class="lede" style="margin-top:10px">Binaries never live in this repo. APKs, installers and archives go in
   <a href="https://github.com/BortKnox/Cowon-a2-transformation-demo/releases" style="border-bottom:1px solid var(--org);text-decoration:none">Releases</a>,
@@ -285,7 +308,7 @@ CONTRIBUTING.md   <span class="c"># the rules for adding a version</span></code>
 
 <footer>
   <span>COWON iAUDIO A2 — TE BENCH · CANVAS STAGE</span>
-  <span>LICENSE: NOT YET CHOSEN · <a href="https://github.com/BortKnox/Cowon-a2-transformation-demo">SOURCE</a></span>
+  <span>MIT LICENSED · <a href="LICENSE">LICENSE</a> · <a href="https://github.com/BortKnox/Cowon-a2-transformation-demo">SOURCE</a></span>
 </footer>
 
 </main>

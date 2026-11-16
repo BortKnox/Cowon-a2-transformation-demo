@@ -18,7 +18,7 @@ tagged [Release](https://github.com/BortKnox/Cowon-a2-transformation-demo/releas
 
 | Version | State | What it is | Open |
 |---|---|---|---|
-| **v4** | latest | Current canvas, the largest build yet: the 24-mode structure carried forward with a fuller music screen. Labels inside the file still read V3 — relabelling is a later pass. | [open v4](https://bortknox.github.io/Cowon-a2-transformation-demo/v4/) |
+| **v4** | latest | Current canvas: the 24-mode structure carried forward, with ongoing work on input handling and the music screen. The in-page changelog still describes what v3 added. | [open v4](https://bortknox.github.io/Cowon-a2-transformation-demo/v4/) |
 | **v3** | stable | 24 modes, OP-1 style tape reels, signal-flow sound chain, rebuilt icons, RANK feasibility percentages for the A2 and a PC build. | [open v3](https://bortknox.github.io/Cowon-a2-transformation-demo/v3/) |
 | **v2** | archive | 17 modes. Looper, recorder, sound chain, routing and a status line. | [open v2](https://bortknox.github.io/Cowon-a2-transformation-demo/v2/) |
 | **v1** | archive | The original: real photo chassis, 8 modes. Kept as the reference and the rollback. | [open v1](https://bortknox.github.io/Cowon-a2-transformation-demo/v1/) |
@@ -48,6 +48,12 @@ press Enter on MUSIC.
 
 Details, signing rules and the release checklist: [docs/PACKAGING.md](docs/PACKAGING.md).
 
+## Companion tools
+
+**[A2 Video Forge](tools/a2-video-forge/README.md)** — a Windows folder-watching transcoder for the real
+device. Drop a video into the inbox and it produces a 480×272 XviD + MP3 AVI the A2 can play. Python + FFmpeg,
+no telemetry. The canvases imagine the A2's future; this keeps the hardware useful today.
+
 ## Repo layout
 
 ```
@@ -56,7 +62,7 @@ v1/ v2/ v3/ v4/   # frozen canvases, one per version, never edited
 versions/         # gallery linking every canvas
 assets/           # chassis cut-out and preview images
 docs/             # ROADMAP.md, PACKAGING.md
-tools/            # helper scripts (chassis cut-out regenerator)
+tools/            # chassis cut-out script, a2-video-forge/ (Windows transcoder)
 CONTRIBUTING.md   # the rules for adding a version
 ```
 
@@ -82,5 +88,7 @@ then open <http://localhost:8000/>).
 
 ## License
 
-Not chosen yet. Until a licence file exists, assume all rights reserved and ask before reusing the code or
-assets. Public visibility is not a licence.
+MIT — see [LICENSE](LICENSE). The canvases, the hub and the tooling in `tools/` are covered.
+
+This is an unofficial fan project. **COWON** and **iAUDIO** are trademarks of their respective owner; the
+name is used descriptively, and nothing here is endorsed by or affiliated with COWON Systems.

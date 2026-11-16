@@ -18,8 +18,9 @@ Design and prove the app in the browser.
 - [x] v1: photo chassis, 8 modes
 - [x] v2: 17 modes, looper, recorder, sound chain, routing
 - [x] v3: 24 modes, OP-1 style tape/flow/icons, RANK feasibility scoring
-- [x] v4: current canvas, larger music screen (internal labels still say V3)
-- [ ] Relabel the canvas internals from V3 to V4
+- [x] v4: current canvas, larger music screen (labels now read V4)
+- [ ] Relabel the v4 in-page changelog — it still describes v3's additions, which is accurate history but
+      reads as stale documentation
 - [ ] Settle the mode map — 24 modes across 3 pages is the ceiling the panel can carry
 - [ ] Decide what stays simulated versus what becomes a real audio path
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>COWON A2 — TE BENCH V3</title>
+<title>COWON A2 — TE BENCH V4</title>
 <style>
 :root{
   --bench:#E4E4E0; --grid:#D2D2CD; --ink:#111; --dim:#7A7A75; --org:#FF6A1F; --cya:#7FB0D8; --lim:#8CCBA6;
@@ -72,7 +72,7 @@ button.hs.down{background:rgba(0,0,0,.34)}
 </style>
 </head>
 <body>
-<header class="top"><span><i></i><b>COWON iAUDIO A2</b> · FRONT PANEL 1:1 · V3</span><span>TE-STYLE FIRMWARE 3.0</span><span id="audioState">AUDIO: IDLE</span></header>
+<header class="top"><span><i></i><b>COWON iAUDIO A2</b> · FRONT PANEL 1:1 · V4</span><span>TE-STYLE FIRMWARE 4.0</span><span id="audioState">AUDIO: IDLE</span></header>
 <main id="bench"><div id="fit"><div id="rig">
   <div id="glass"></div>
   <canvas id="lcd" aria-label="Cowon A2 LCD, 480 by 272"></canvas>
@@ -92,7 +92,7 @@ button.hs.down{background:rgba(0,0,0,.34)}
 <p class="legend"><b>↑↓←→</b> JOYSTICK · <b>ENTER</b> OK · <b>⌫/ESC</b> BACK (HOLD = SOUND) · <b>A B C</b> SOFT KEYS · <b>S</b> SOUND · <b>F</b> FLAT PATH · <b>O</b> OUTPUT ROUTE · <b>[ ]</b> VOL · <b>P</b> POWER · <b>1 2 3</b> LCD / AV-OUT / HOLD</p>
 <section id="notes"></section>
 <script>
-const NOTES_HTML = `<h2>FIELD NOTES // V3 — HARMONIZED BUILD</h2>
+const NOTES_HTML = `<h2>FIELD NOTES // V4 — HARMONIZED BUILD</h2>
 <h3>WHAT THIS IS</h3>
 <p>The live demo is the paint on the canvas. It will be ported twice: onto the real A2, and into a native PC/Mac emulator that uses modern hardware. This build merges the v2 instrument with the second pass that added a video transport, JetEffect bench, library, diagnostics, power budget and USB. Features that the A2 hardware probably cannot do stay in as the PC-emulator side of the vision, and the RANK screen says so with numbers.</p>
 <h3>RANK: THE PERCENTAGE SYSTEM</h3>
@@ -972,7 +972,7 @@ function rail(m) {
 function drawBoot(ms) {
   const info = Engine.info(), T = Engine.tracks;
   const lines = [
-    'COWON iAUDIO A2 // TE-FW 3.00', 'LCD 480X272 // 1PX VECTOR',
+    'COWON iAUDIO A2 // TE-FW 4.00', 'LCD 480X272 // 1PX VECTOR',
     'WEBAUDIO ' + ((window.AudioContext || window.webkitAudioContext) ? 'PRESENT' : 'MISSING') + (info.state === 'none' ? ' // LOCKED, ANY KEY ARMS' : ' // ' + info.state.toUpperCase()),
     'TRACKS ' + T.length + ' X ' + TRACK_SEC.toFixed(2) + 'S // SEED ' + (Engine.st.seed >>> 0).toString(16).toUpperCase().padStart(8, '0'),
   ];
@@ -2363,7 +2363,7 @@ const Utility = {
 };
 
 /* =====================================================================
-   V3 SCREENS — PLAYER / JET / LIBRARY / DIAG / POWER / USB / AUDIT
+   V4 SCREENS — PLAYER / JET / LIBRARY / DIAG / POWER / USB / AUDIT
    Grounded in the 2006 spec sheet: 480x272, 1.8in HDD 20/30GB, 4300mAh,
    DivX/XviD/WMV9 to 720x576, JetEffect, 25-preset FM, USB 2.0 device +
    host, and composite OUT ONLY (there is no video input on this machine).
