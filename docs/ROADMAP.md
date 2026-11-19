@@ -9,6 +9,9 @@ It began as a firmware overhaul for a physical COWON iAUDIO A2. Working in a bro
 itself the interesting part, and then made the *instrument* the interesting part: tape, loops, a signal
 chain, guitar and vocal processing. The hardware is still the north star; the software is what can ship first.
 
+The next canvas turns the instrument toward guitar and vocals in earnest: the sound chain becomes real
+DSP. Its scope, module list, naming and references are written down in [docs/V5-BRIEF.md](V5-BRIEF.md).
+
 ## Phases
 
 ### M0 — Canvas (ongoing)
@@ -19,6 +22,9 @@ Design and prove the app in the browser.
 - [x] v2: 17 modes, looper, recorder, sound chain, routing
 - [x] v3: 24 modes, OP-1 style tape/flow/icons, RANK feasibility scoring
 - [x] v4: current canvas, larger music screen (labels now read V4)
+- [ ] v5: guitar/vocal rig canvas — the sound chain becomes real DSP: any line-level input, the classic
+      pedalboard, a ten-amp gain ladder, IR cabs, mod/time engines and a vocal channel. Scope, names and
+      references: [docs/V5-BRIEF.md](V5-BRIEF.md)
 - [ ] Relabel the v4 in-page changelog — it still describes v3's additions, which is accurate history but
       reads as stale documentation
 - [ ] Settle the mode map — 24 modes across 3 pages is the ceiling the panel can carry
@@ -53,8 +59,13 @@ Open question: background audio and USB audio-device support vary a lot by manuf
 
 The reason this stopped being a media player.
 
+> Shifted (see [docs/V5-BRIEF.md](V5-BRIEF.md)): the *design* of this phase now happens in the canvas
+> stage — v5 designs and proves the rig in the browser. What stays here is making it real on ported
+> hardware: input latency, native FX nodes, presets across platforms.
+
 - [ ] Audio input with acceptable round-trip latency on desktop first
-- [ ] FX chain: the on-screen chain becomes real nodes, not simulation
+- [ ] FX chain: the on-screen chain becomes real nodes, not simulation (canvas side lands with v5; this
+      item covers the native port)
 - [ ] Presets that survive between desktop and Android
 - [ ] Input monitoring without feedback (headphone-detection warnings)
 
